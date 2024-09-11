@@ -13,8 +13,8 @@ public class ThreadState {
         first.start();
         second.start();
         Thread.sleep(1000);
-        if (second.getState() == Thread.State.TERMINATED &&
-                first.getState() == Thread.State.TERMINATED) {
+        if (second.getState() == Thread.State.TERMINATED
+                && first.getState() == Thread.State.TERMINATED) {
             System.out.println("Работа завершена");
         }
     }
