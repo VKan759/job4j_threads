@@ -24,5 +24,6 @@ public class ConsoleProgress implements Runnable {
         thread.start();
         Thread.sleep(5000);
         thread.interrupt();
+        thread.join();
     }
 }
