@@ -31,13 +31,14 @@ public class Wget implements Runnable {
             while ((bytesRead = input.read(dataBuffer, bytesReadCount, dataBuffer.length - bytesReadCount)) != -1) {
                 bytesReadCount += bytesRead;
                 output.write(dataBuffer, 0, bytesRead);
-                if (bytesReadCount == speed) {
+                if (bytesReadCount >= speed) {
                     long time = System.currentTimeMillis() - start;
                     if (time < 1000) {
                         Thread.sleep(1000 - time);
                     }
                     System.out.println(bytesReadCount + " bytes written : " + "time - " + (System.currentTimeMillis() - start));
                     bytesReadCount = 0;
+                    start = System.currentTimeMillis();
                 }
             }
             System.out.println(bytesReadCount + " bytes written : " + "time - " + (System.currentTimeMillis() - start));
