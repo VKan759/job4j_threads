@@ -12,12 +12,18 @@ public class AccountStorage {
     private final HashMap<Integer, Account> accounts = new HashMap<>();
 
     public synchronized boolean add(Account account) {
-        Account result = accounts.putIfAbsent(account.id(), account);
+        Account result = account;
+        if (account != null) {
+            result = accounts.putIfAbsent(account.id(), account);
+        }
         return result == null;
     }
 
     public synchronized boolean update(Account account) {
-        Account result = accounts.put(account.id(), account);
+        Account result = null;
+        if (account != null) {
+            result = accounts.put(account.id(), account);
+        }
         return result != null;
     }
 
@@ -33,7 +39,7 @@ public class AccountStorage {
         boolean result = false;
         Account from = accounts.get(fromId);
         Account to = accounts.get(toId);
-        if (from.amount() >= amount) {
+        if (from != null && to != null && from.amount() >= amount) {
             update(new Account(fromId, from.amount() - amount));
             update(new Account(toId, to.amount() + amount));
             result = true;
