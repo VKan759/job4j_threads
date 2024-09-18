@@ -15,6 +15,7 @@ public class SimpleBlockingQueue<T> {
 
     public SimpleBlockingQueue(int sizeLimit) {
         this.sizeLimit = sizeLimit;
+
     }
 
     public synchronized void offer(T value) throws InterruptedException {
@@ -32,5 +33,9 @@ public class SimpleBlockingQueue<T> {
         T result = queue.poll();
         notifyAll();
         return result;
+    }
+
+    public synchronized boolean isEmpty() {
+        return queue.isEmpty();
     }
 }
