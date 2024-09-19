@@ -17,7 +17,7 @@ class ParallelSearchTest {
                 try {
                     simpleBlockingQueue.offer(i);
                 } catch (InterruptedException e) {
-                    throw new RuntimeException("Ошибка при работе с методом offer()");
+                    Thread.currentThread().interrupt();
                 }
             }
         });
@@ -27,7 +27,7 @@ class ParallelSearchTest {
                 try {
                     list.add(simpleBlockingQueue.poll());
                 } catch (InterruptedException e) {
-                    throw new RuntimeException("Ошибка при работе с методом poll()");
+                    Thread.currentThread().interrupt();
                 }
             }
         });
@@ -49,7 +49,7 @@ class ParallelSearchTest {
                         try {
                             queue.offer(i);
                         } catch (InterruptedException e) {
-                            throw new RuntimeException(e);
+                            Thread.currentThread().interrupt();
                         }
                     }
                 }
@@ -61,7 +61,6 @@ class ParallelSearchTest {
                         try {
                             buffer.add(queue.poll());
                         } catch (InterruptedException e) {
-                            e.printStackTrace();
                             Thread.currentThread().interrupt();
                         }
                     }
