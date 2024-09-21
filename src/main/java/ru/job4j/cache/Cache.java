@@ -15,14 +15,15 @@ public class Cache {
     }
 
     public boolean update(Base model) throws OptimisticException {
-        Base stored = memory.get(model.id());
-        if (stored.version() != model.version()) {
-            throw new OptimisticException("Versions are not equal");
-        }
-        delete(model.id());
-        Function<Base, Base> function = m -> new Base(m.id(), m.name(), m.version() + 1);
-        memory.computeIfAbsent(model.id(), key -> function.apply(model));
-        return true;
+        Function<Base, Base> function = m -> {
+            Base stored = memory.get(model.id());
+            if (stored.version() != model.version()) {
+                throw new OptimisticException("Versions are not equal");
+            }
+            return new Base(m.id(), m.name(), m.version() + 1);
+        };
+        return memory.computeIfPresent(model.id(), (key, value) -> function.apply(model)) == model;
+
     }
 
     public void delete(int id) {
