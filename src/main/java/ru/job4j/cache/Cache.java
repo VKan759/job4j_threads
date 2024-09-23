@@ -4,7 +4,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 public class Cache {
@@ -15,15 +14,14 @@ public class Cache {
     }
 
     public boolean update(Base model) throws OptimisticException {
-        Function<Base, Base> function = m -> {
-            Base stored = memory.get(model.id());
-            if (stored.version() != model.version()) {
-                throw new OptimisticException("Versions are not equal");
-            }
-            return new Base(m.id(), m.name(), m.version() + 1);
-        };
-        return memory.computeIfPresent(model.id(), (key, value) -> function.apply(model)) == model;
-
+        return memory.computeIfPresent(model.id(),
+                (key, value) -> {
+                    Base stored = memory.get(model.id());
+                    if (stored.version() != model.version()) {
+                        throw new OptimisticException("Versions are not equal");
+                    }
+                    return new Base(key, model.name(), (value.version() + 1));
+                }) == model;
     }
 
     public void delete(int id) {
