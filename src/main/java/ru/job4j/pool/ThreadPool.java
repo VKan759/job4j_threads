@@ -8,13 +8,12 @@ import java.util.List;
 public class ThreadPool {
     private final List<Thread> threads = new LinkedList<>();
     private final SimpleBlockingQueue<Runnable> tasks = new SimpleBlockingQueue<>(2);
-    private volatile boolean running = true;
 
     public ThreadPool() {
         int size = Runtime.getRuntime().availableProcessors();
         for (int i = 0; i < size; i++) {
             Thread thread = new Thread(() -> {
-                while (running || !tasks.isEmpty()) {
+                while (tasks.isEmpty()) {
                     try {
                         Runnable task = tasks.poll();
                         if (task != null) {
@@ -31,13 +30,10 @@ public class ThreadPool {
     }
 
     public void work(Runnable job) throws InterruptedException {
-        if (running) {
             tasks.offer(job);
-        }
     }
 
     public void shutdown() throws InterruptedException {
-        running = false;
         for (Thread thread : threads) {
             thread.interrupt();
             thread.join();
