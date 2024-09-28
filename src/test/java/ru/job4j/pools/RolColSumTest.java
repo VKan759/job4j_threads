@@ -11,7 +11,7 @@ class RolColSumTest {
                 {1, 2},
                 {3, 4}
         };
-        RolColSum.Sums[] result = {new RolColSum.Sums(3, 4), new RolColSum.Sums(7, 6)};
+        Sums[] result = {new Sums(3, 4), new Sums(7, 6)};
         assertThat(RolColSum.sum(array)).isEqualTo(result);
     }
 
@@ -21,7 +21,7 @@ class RolColSumTest {
                 {1, 2},
                 {3, 4}
         };
-        RolColSum.Sums[] result = {new RolColSum.Sums(3, 4), new RolColSum.Sums(7, 6)};
+        Sums[] result = {new Sums(3, 4), new Sums(7, 6)};
         assertThat(RolColSum.asyncSum(array)).isEqualTo(result);
     }
 }
